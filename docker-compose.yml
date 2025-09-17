@@ -1,0 +1,27 @@
+services:
+  post-microservice:
+    build:
+      context: ./post-microservice
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+
+  user-microservice:
+    build:
+      context: ./user-microservice
+      dockerfile: Dockerfile
+    ports:
+      - 3002:3002
+
+  api-gateway:
+    build:
+      context: ./api-gateway/
+      dockerfile: Dockerfile
+    environment:
+      POST_API_HOST: post-microservice
+      USER_API_HOST: user-microservice
+    ports:
+      - 3000:3000
+    depends_on:
+      - post-microservice
+      - user-microservice
